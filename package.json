@@ -1,0 +1,15 @@
+{
+  "name": "meta-storage",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Sraleik",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha **/*.test.js"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "mocha": "^7.0.1"
+  }
+}
