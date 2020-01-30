@@ -1,13 +1,4 @@
-const createBluzelleInterface = require('./bluzellifier');
-// import keyValueBdd from 'bluzelle' // uncomment this line to use bluzelle
-const keyValueBdd = createBluzelleInterface(localStorage);
-
-async function getBdd (keyPair) {
-	const simpleBdd = await keyValueBdd({
-		public_pem: keyPair.public,
-		private_pem: keyPair.private
-	});
-
+async function getBdd (simpleBdd) {
 	const create = (key, value) => {
 		return simpleBdd.create(key, JSON.stringify(value));
 	};
