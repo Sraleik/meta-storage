@@ -35,6 +35,20 @@ describe('MetaStorage', async () => {
 		expect(await metaStorage.read('neo')).to.be.null;
 	});
 
+	it('Should stringify Array', async () => {
+		const fruit = [ 
+			'banane',
+			'pêche',
+			'fraise',
+			'tomate'
+		];
+
+		await metaStorage.set('fruit', fruit);
+		const resFruit = await metaStorage.read('fruit');
+
+		expect(resFruit).to.be.deep.equal(fruit);
+	});
+
 	it('Should stringify Object', async () => {
 		const bob = {
 			firstName: 'Bob',
