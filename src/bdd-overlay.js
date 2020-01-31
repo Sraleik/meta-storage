@@ -1,4 +1,4 @@
-async function getBdd (simpleBdd) {
+async function createMetaStorage(simpleBdd) {
 	const create = (key, value) => {
 		return simpleBdd.create(key, JSON.stringify(value));
 	};
@@ -29,4 +29,4 @@ async function getBdd (simpleBdd) {
 	};
 }
 
-module.exports = getBdd; 
+module.exports = createMetaStorage; 
