@@ -1,4 +1,3 @@
-import { Greeter } from './index';
 import { execSync } from 'child_process';
 import mockBluzellePromise  from '../test-utils/create-mock-bluzelle';
 import createMetaStorage  from './bdd-overlay';
