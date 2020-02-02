@@ -1,6 +1,6 @@
 /* eslint-disable prefer-promise-reject-errors */
-module.exports = function createBluzelleLikeBdd (bdd) {
-	function create (key, value) {
+export default function createBluzelleLikeBdd (bdd: any) {
+	function create (key: string, value: any) {
 		return new Promise((resolve, reject) => {
 			if (bdd.getItem(key)) {
 				reject(new Error(`The key: ${key} already exist`));
@@ -12,7 +12,7 @@ module.exports = function createBluzelleLikeBdd (bdd) {
 		});
 	}
 
-	function update (key, value) {
+	function update (key: string, value: any) {
 		return new Promise((resolve, reject) => {
 			if (bdd.getItem(key)) {
 				resolve(
@@ -24,7 +24,7 @@ module.exports = function createBluzelleLikeBdd (bdd) {
 		});
 	}
 
-	function read (key) {
+	function read (key: string) {
 		return new Promise((resolve) => {
 			resolve(
 				bdd.getItem(key)
@@ -32,7 +32,7 @@ module.exports = function createBluzelleLikeBdd (bdd) {
 		});
 	}
 
-	function remove (key) {
+	function remove (key: string) {
 		return new Promise((resolve) => {
 			resolve(
 				bdd.removeItem(key)
@@ -40,7 +40,7 @@ module.exports = function createBluzelleLikeBdd (bdd) {
 		});
 	}
 
-	function has (key) {
+	function has (key: string) {
 		return new Promise((resolve) => {
 			resolve(
 				Boolean(bdd.getItem(key))
@@ -49,7 +49,7 @@ module.exports = function createBluzelleLikeBdd (bdd) {
 	}
 
 	// eslint-disable-next-line no-unused-vars
-	return function bddConnection (keyPair) {
+	return function bddConnection (keyPair: KeyPair) {
 		return new Promise((resolve) => {
 			resolve({
 				create,
@@ -62,3 +62,8 @@ module.exports = function createBluzelleLikeBdd (bdd) {
 		});
 	};
 };
+
+interface KeyPair {
+	public: string,
+	private: string
+}

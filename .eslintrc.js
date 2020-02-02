@@ -3,8 +3,7 @@ module.exports = {
         "browser": true,
         "commonjs": true,
         "es6": true,
-        "node": true,
-        "mocha": true
+        "node": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -27,5 +26,11 @@ module.exports = {
             "error",
             "always"
         ]
-    }
+    },
+    "overrides": [
+        {
+          "files": ["**/*.test.js"], // Or *.test.js
+          "env": { "mocha": true }
+        }
+    ]
 }
