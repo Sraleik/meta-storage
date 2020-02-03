@@ -2,7 +2,7 @@
 
 ## Description
 
-Simple overlay on a key value database (like bluzelle)
+Simple overlay on bluzelle Connection
 
 - Strigify data before save
 - JSON.parse data on read
@@ -24,6 +24,13 @@ pnpm add @sraleik/meta-storage
 
 ## Usage 
 
-TODO
+```javascript
+const { createMockBluzelle } = require('@sraleik/mock-bluzelle');  //Or any kind of bluzelle connection
+const { createMetaStorage } = require("@sraleik/meta-storage");
 
+const mockBluzelle = await createMockBluzelle();
+const metaStorage = await createMetaStorage(mockBluzelle);
 
+await metaStorage.set('lol', {winner: 'chickenDinner'})
+res = await metaStorage.read('lol')
+```
