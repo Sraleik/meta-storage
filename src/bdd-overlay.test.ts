@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import  { createMockBluzelle } from '@sraleik/mock-bluzelle';
-import createMetaStorage  from './bdd-overlay';
+import { createMetaStorage  } from './bdd-overlay';
 
 let mockBluzelle: any, metaStorage: any;
 
