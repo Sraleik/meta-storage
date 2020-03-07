@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import  { createMockBluzelle } from '@sraleik/mock-bluzelle';
 import { createMetaStorage  } from './bdd-overlay';
+import { v4 as uuid } from 'uuid';
 
 let mockBluzelle: any, metaStorage: any;
 
@@ -15,31 +16,37 @@ describe('MetaStorage', () => {
 	});
 
     test('Should create the key and save value', async () => {
-        await metaStorage.set('john', 'doe');
-        expect(await metaStorage.read('john')).toBe('doe');
+		const user = {id: uuid(), type:'user', firstname: 'john', lastName: 'doe' }
+		await metaStorage.set(user);
+		const res = await metaStorage.read(user.id) 
+        expect(user).toStrictEqual(res);
     });
 
     test('Should update the key value', async () => {
-		await metaStorage.set('billy', 'bob');
-		await metaStorage.set('billy', 'the kid');
+		const userId = uuid()
+		await metaStorage.set({id: userId, type:'user', name: 'bob'});
+		await metaStorage.set({id: userId, type:'user', name: 'john'});
 
-		expect(await metaStorage.read('billy')).toBe('the kid');
+		const res = await metaStorage.read(userId)
+
+		expect(res.name).toBe('john');
 	});
 
 	test('Should delete the key', async () => {
-		await metaStorage.set('neo', 'the one');
-		await metaStorage.delete('neo');
+		const user = {id: uuid(), type:'user', name: 'neo'}
+		await metaStorage.set(user);
+		await metaStorage.delete(user.id);
 
-		expect(await metaStorage.read('neo')).toBeNull()
+		expect(await metaStorage.read(user.id)).toBeNull()
 	});
 
 	test('Should stringify Array', async () => {
-		const fruit = ['banane', 'pêche', 'fraise', 'tomate'];
+		const fruit = {id: uuid(), type: 'fruits', fruitList: ['banane', 'pêche', 'fraise', 'tomate'] };
 
-		await metaStorage.set('fruit', fruit);
-		const resFruit = await metaStorage.read('fruit');
+		await metaStorage.set(fruit);
+		const resFruit = await metaStorage.read(fruit.id, fruit.type);
 
-		expect(resFruit).toEqual(fruit);
+		expect(resFruit).toStrictEqual(fruit);
 	});
 
 	test('Should stringify Object', async () => {
@@ -50,22 +57,26 @@ describe('MetaStorage', () => {
 			job: 'worker',
 		};
 
-		await metaStorage.set('bob', bob);
-		const resBob = await metaStorage.read('bob');
+		const invoice = { id: uuid(), type: 'invoice', to: bob}
 
-		expect(resBob).toEqual(bob);
+		await metaStorage.set(invoice);
+		const res= await metaStorage.read(invoice.id, invoice.type);
+
+		expect(res.to).toEqual(bob);
 	});
 
 	test('Should stringify date', async () => {
 		const kirikouBirthday = new Date();
 		const kirikou = {
+			id: uuid(),
+			type: 'user',
 			firstName: 'kirikou',
 			lastName: 'est petit',
 			birthday: kirikouBirthday,
 		};
 
-		await metaStorage.set('kirikou', kirikou);
-		const resKirikou = await metaStorage.read('kirikou');
+		await metaStorage.set(kirikou);
+		const resKirikou = await metaStorage.read(kirikou.id, kirikou.type);
 
 		expect(resKirikou.birthday).toBe(kirikouBirthday.toISOString());
 	});

@@ -29,8 +29,8 @@
   "devDependencies": {
     "@sraleik/mock-bluzelle": "^1.0.4",
     "@types/jest": "^25.1.1",
-    "@types/node-localstorage": "^1.3.0",
     "@types/node": "^13.9.0",
+    "@types/node-localstorage": "^1.3.0",
     "eslint": "^6.8.0",
     "jest": "^25.1.0",
     "node-localstorage": "^2.1.5",
@@ -39,5 +39,9 @@
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "@types/uuid": "^7.0.0",
+    "uuid": "^7.0.2"
   }
 }

@@ -1,23 +1,23 @@
 export async function createMetaStorage(simpleBdd: any) {
-  const create = (key: string, value: any) => {
-    return simpleBdd.create(key, JSON.stringify(value));
+  const create = (itemMeta: any) => {
+    return simpleBdd.create(itemMeta.id, JSON.stringify(itemMeta));
   };
 
-  const update = (key: string, value: any) => {
-    return simpleBdd.update(key, JSON.stringify(value));
+  const update = (itemMeta: any) => {
+    return simpleBdd.update(itemMeta.id, JSON.stringify(itemMeta));
   };
 
-  const read = async (key: string) => {
+  const read = async (key: string, type: string) => {
     const value = await simpleBdd.read(key);
     return JSON.parse(value);
   };
 
-  const set = async (key: string, value: any) => {
-    if (await simpleBdd.has(key)) {
-      return update(key, value);
+  const set = async (itemMeta: any) => {
+    if (await simpleBdd.has(itemMeta.id)) {
+      return update(itemMeta);
     }
 
-    return create(key, value);
+    return create(itemMeta);
   };
 
   return {
