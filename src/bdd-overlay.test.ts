@@ -11,7 +11,7 @@ describe('MetaStorage', () => {
     });
 
 	afterAll(function() {
-		execSync('rm -rf ./scratch/*');
+		execSync('rm -rf ./scratch');
 	});
 
     test('Should create the key and save value', async () => {
