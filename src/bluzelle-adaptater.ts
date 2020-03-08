@@ -1,19 +1,19 @@
-export async function createMetaStorage(simpleBdd: any) {
+export async function createBluzelleMetaStorage(bluzelleBdd: any) {
   const create = (itemMeta: any) => {
-    return simpleBdd.create(itemMeta.id, JSON.stringify(itemMeta));
+    return bluzelleBdd.create(itemMeta.id, JSON.stringify(itemMeta));
   };
 
   const update = (itemMeta: any) => {
-    return simpleBdd.update(itemMeta.id, JSON.stringify(itemMeta));
+    return bluzelleBdd.update(itemMeta.id, JSON.stringify(itemMeta));
   };
 
   const read = async (key: string, type: string) => {
-    const value = await simpleBdd.read(key);
+    const value = await bluzelleBdd.read(key);
     return JSON.parse(value);
   };
 
   const set = async (itemMeta: any) => {
-    if (await simpleBdd.has(itemMeta.id)) {
+    if (await bluzelleBdd.has(itemMeta.id)) {
       return update(itemMeta);
     }
 
@@ -21,7 +21,7 @@ export async function createMetaStorage(simpleBdd: any) {
   };
 
   return {
-    ...simpleBdd,
+    ...bluzelleBdd,
     create,
     update,
     read,

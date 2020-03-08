@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import  { createMockBluzelle } from '@sraleik/mock-bluzelle';
-import { createMetaStorage  } from './bdd-overlay';
+import { createBluzelleMetaStorage  } from './bluzelle-adaptater';
 import { v4 as uuid } from 'uuid';
 
 let mockBluzelle: any, metaStorage: any;
@@ -8,7 +8,7 @@ let mockBluzelle: any, metaStorage: any;
 describe('MetaStorage', () => {
     beforeAll(async function() {
 		mockBluzelle = await createMockBluzelle('./scratch');
-		metaStorage = await createMetaStorage(mockBluzelle);
+		metaStorage = await createBluzelleMetaStorage(mockBluzelle);
     });
 
 	afterAll(function() {
