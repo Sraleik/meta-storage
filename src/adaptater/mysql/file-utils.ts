@@ -6,7 +6,7 @@ import { IFileMeta } from "../../interface/IFileMeta";
 import { FileMeta } from "../../entity/FileMeta";
 import { FileVersion } from "../../entity/FileVersion";
 
-async function prepareFileVersions(fileVersions?: [IFileVersion] | []): Promise<FileVersion[] | undefined>{
+export async function prepareFileVersions(fileVersions?: [IFileVersion] | []): Promise<FileVersion[] | undefined>{
     if(!fileVersions){
         return undefined
     }
@@ -35,13 +35,11 @@ async function prepareFileVersions(fileVersions?: [IFileVersion] | []): Promise<
     return versions.length === 0 ? undefined : versions
 }
 
-async function prepareFile(fileMeta: IFileMeta){
+export async function prepareFile(fileMeta: IFileMeta): Promise<FileMeta>{
     const file = new FileMeta()
     file.id = fileMeta.id 
     file.type = fileMeta.type 
-    console.log('file', file)
     const versions = await prepareFileVersions(fileMeta.versions)
-    console.log('versions', versions)
 
     file.versions = versions 
 
@@ -59,6 +57,3 @@ async function set(itemMeta: IFileMeta){
     
     await connection.close()
 }
-
-
-export {set}
