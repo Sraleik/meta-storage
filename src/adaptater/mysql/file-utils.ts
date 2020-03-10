@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import {v4 as uuid} from "uuid";
 import {createConnection} from "typeorm";
 import { IFileVersion } from "../../interface/IFileVersion";
 import { IFileMeta } from "../../interface/IFileMeta";
@@ -20,7 +19,7 @@ export async function prepareFileVersions(fileVersions?: [IFileVersion] | []): P
 
         if(!version) {
             version = new FileVersion()
-            version.id = uuid()
+            version.id = fileVersion.id
             version.cid = fileVersion.cid
             version.date = fileVersion.date
             version.name = fileVersion.name

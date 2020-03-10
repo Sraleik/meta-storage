@@ -25,15 +25,15 @@ describe.only('MetaStorage', () => {
 					cid: 'FakeCID',
 					name: 'newFile.txt',
 					isEncrypted: false,
-					date: new Date(),
+					date: new Date().toISOString(),
 					parentFolderId: '/'
 				} 
 			]
 		}
 
 		await metaStorage.set(file);
-		// const res = await metaStorage.read(user.id) 
-        // expect(user).toStrictEqual(res);
+		const res = await metaStorage.read(file.id, file.type) 
+        expect(file).toStrictEqual(res);
     });
 
     test('Should update the key value', async () => {

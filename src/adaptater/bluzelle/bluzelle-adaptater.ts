@@ -7,8 +7,8 @@ export async function createBluzelleMetaStorage(bluzelleBdd: any) {
     return bluzelleBdd.update(itemMeta.id, JSON.stringify(itemMeta));
   };
 
-  const read = async (key: string, type: string) => {
-    const value = await bluzelleBdd.read(key);
+  const read = async (id: string, type: string) => {
+    const value = await bluzelleBdd.read(id);
     return JSON.parse(value);
   };
 
