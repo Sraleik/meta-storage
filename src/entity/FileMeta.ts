@@ -10,6 +10,6 @@ export class FileMeta extends BaseEntity {
     @Column()
     type!: string;
 
-    @OneToMany(type => FileVersion, fileVersion => fileVersion.fileMeta, { cascade:true })
+    @OneToMany(type => FileVersion, fileVersion => fileVersion.fileMeta, { cascade: true })
     versions?: FileVersion[]
 }

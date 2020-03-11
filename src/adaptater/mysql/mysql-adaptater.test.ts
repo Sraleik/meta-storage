@@ -3,33 +3,42 @@ import { createConnection } from "typeorm";
 import { createMysqlMetaStorage  } from './mysql-adaptater';
 import { v4 as uuid } from 'uuid';
 
-let mysqlBdd: any, metaStorage: any;
+let mysqlConnection: any, metaStorage: any;
 
-describe.only('MetaStorage', () => {
+function fileFactory ({
+	cid = 'FakeCID',
+	name = 'newFile.txt',
+	isEncrypted = false,
+	parentFolderId = '/'
+} = {}){
+	return {
+		id: uuid(), 
+		type:'file', 
+		versions: [ 
+			{
+				id: uuid(), 
+				cid,
+				name,
+				isEncrypted,
+				date: new Date().toISOString(),
+				parentFolderId
+			} 
+		]
+	}
+}
+
+describe('MetaStorage', () => {
     beforeAll(async function() {
-		mysqlBdd = await createConnection();
-		metaStorage = await createMysqlMetaStorage(mysqlBdd);
+		mysqlConnection= await createConnection();
+		metaStorage = await createMysqlMetaStorage(mysqlConnection);
 	});
 
     afterAll(async function() {
 		metaStorage.close()
     });
 
-    test.only('Should create the key and save value', async () => {
-		const file = {
-			id: uuid(), 
-			type:'file', 
-			versions: [ 
-				{
-					id: uuid(), 
-					cid: 'FakeCID',
-					name: 'newFile.txt',
-					isEncrypted: false,
-					date: new Date().toISOString(),
-					parentFolderId: '/'
-				} 
-			]
-		}
+    test('Should create file & versions', async () => {
+		const file = fileFactory() 
 
 		await metaStorage.set(file);
 		const res = await metaStorage.read(file.id, file.type) 
@@ -37,49 +46,57 @@ describe.only('MetaStorage', () => {
     });
 
     test('Should update the key value', async () => {
-		const userId = uuid()
-		await metaStorage.set({id: userId, type:'user', name: 'bob'});
-		await metaStorage.set({id: userId, type:'user', name: 'john'});
+		const file = fileFactory() 
+		await metaStorage.set(file);
 
-		const res = await metaStorage.read(userId)
+		file.versions[0].name = 'super-plan.txt'	
+		await metaStorage.set(file);
 
-		expect(res.name).toBe('john');
+		const res = await metaStorage.read(file.id, file.type)
+
+		expect(res).toEqual(file);
 	});
 
-	test('Should delete the key', async () => {
-		const user = {id: uuid(), type:'user', name: 'neo'}
-		await metaStorage.set(user);
-		await metaStorage.delete(user.id);
+	test('Should have the file', async () => {
+		const file = fileFactory() 
+		const file2 = fileFactory() 
+		await metaStorage.set(file);
 
-		expect(await metaStorage.read(user.id)).toBeNull()
+		const isFileStored = await metaStorage.has(file.id, file.type)
+		expect(isFileStored).toEqual(true);
+		const isFile2Stored = await metaStorage.has(file2.id, file2.type)
+		expect(isFile2Stored).toEqual(false);
 	});
 
-	test('Should stringify Array', async () => {
-		const fruit = {id: uuid(), type: 'fruits', fruitList: ['banane', 'pêche', 'fraise', 'tomate'] };
+	test('Should delete the file', async () => {
+		const file = fileFactory() 
+		await metaStorage.set(file);
+		expect(await metaStorage.has(file.id, file.type)).toBe(true)
 
-		await metaStorage.set(fruit);
-		const resFruit = await metaStorage.read(fruit.id, fruit.type);
-
-		expect(resFruit).toStrictEqual(fruit);
+		await metaStorage.destroy(file.id, file.type)
+		expect(await metaStorage.has(file.id, file.type)).toBe(false)
 	});
 
-	test('Should stringify Object', async () => {
-		const bob = {
-			firstName: 'Bob',
-			lastName: 'le bricoleur',
-			age: 31,
-			job: 'worker',
-		};
+	test('Should have multiple version', async () => {
+		const file = fileFactory() 
+		const versionDate = new Date()
+		versionDate.setSeconds(versionDate.getSeconds() + 10)
+		file.versions.push({
+			id: uuid(), 
+			cid: 'FakerCid',
+			name: 'notarealfile.txt',
+			date: versionDate.toISOString(),
+			isEncrypted: true,
+			parentFolderId: '/'
+		})
 
-		const invoice = { id: uuid(), type: 'invoice', to: bob}
+		await metaStorage.set(file);
+		const res = await metaStorage.read(file.id, file.type);
 
-		await metaStorage.set(invoice);
-		const res= await metaStorage.read(invoice.id, invoice.type);
-
-		expect(res.to).toEqual(bob);
+		expect(res).toStrictEqual(file);
 	});
 
-	test('Should stringify date', async () => {
+	test.skip('Should stringify date', async () => {
 		const kirikouBirthday = new Date();
 		const kirikou = {
 			id: uuid(),

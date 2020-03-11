@@ -1,4 +1,4 @@
-import {Entity, PrimaryColumn, Column, BaseEntity, OneToOne, JoinColumn } from "typeorm";
+import {Entity, PrimaryColumn, Column, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
 import { FileMeta } from "./FileMeta";
 
 @Entity()
@@ -22,7 +22,7 @@ export class FileVersion extends BaseEntity {
     @Column()
     parentFolderId!: string;
 
-    @OneToOne(type => FileMeta, fileMeta => fileMeta.versions)
+    @ManyToOne(type => FileMeta, fileMeta => fileMeta.versions, { onDelete:'CASCADE' })
     @JoinColumn()
     fileMeta!: FileMeta;
 }

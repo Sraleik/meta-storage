@@ -15,17 +15,13 @@ export async function prepareFileVersions(fileVersions?: [IFileVersion] | []): P
     for(let i = 0; i < fileVersions.length; i++){
         const fileVersion = fileVersions[i]
 
-        let version: FileVersion | undefined = await FileVersion.findOne(fileVersion.id)
-
-        if(!version) {
-            version = new FileVersion()
-            version.id = fileVersion.id
-            version.cid = fileVersion.cid
-            version.date = fileVersion.date
-            version.name = fileVersion.name
-            version.isEncrypted = fileVersion.isEncrypted
-            version.parentFolderId = fileVersion.parentFolderId
-        }
+        let version = new FileVersion()
+        version.id = fileVersion.id
+        version.cid = fileVersion.cid
+        version.date = fileVersion.date
+        version.name = fileVersion.name
+        version.isEncrypted = fileVersion.isEncrypted
+        version.parentFolderId = fileVersion.parentFolderId
 
         versions.push(version)
 
