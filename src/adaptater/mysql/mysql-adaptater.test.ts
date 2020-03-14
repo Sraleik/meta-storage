@@ -95,19 +95,12 @@ describe('MetaStorage', () => {
 		expect(res).toStrictEqual(file);
 	});
 
-	test.skip('Should stringify date', async () => {
-		const kirikouBirthday = new Date();
-		const kirikou = {
-			id: uuid(),
-			type: 'user',
-			firstName: 'kirikou',
-			lastName: 'est petit',
-			birthday: kirikouBirthday,
-		};
+	test('Should stringify date', async () => {
+		const file = fileFactory() 
+		await metaStorage.set(file);
 
-		await metaStorage.set(kirikou);
-		const resKirikou = await metaStorage.read(kirikou.id, kirikou.type);
+		const res = await metaStorage.read(file.id, file.type);
 
-		expect(resKirikou.birthday).toBe(kirikouBirthday.toISOString());
+		expect(res.versions[0].date).toBe(file.versions[0].date);
 	});
 });
