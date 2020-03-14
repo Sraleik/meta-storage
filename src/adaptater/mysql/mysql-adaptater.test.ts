@@ -1,4 +1,3 @@
-import { execSync } from 'child_process';
 import { createConnection } from "typeorm";
 import { createMysqlMetaStorage  } from './mysql-adaptater';
 import { v4 as uuid } from 'uuid';
