@@ -40,18 +40,18 @@ describe('MetaStorage', () => {
 		const file = fileFactory() 
 
 		await metaStorage.set(file);
-		const res = await metaStorage.read(file.id, file.type) 
+		const res = await metaStorage.read(file) 
         expect(file).toStrictEqual(res);
     });
 
-    test('Should update the key value', async () => {
+    test('Should update the file', async () => {
 		const file = fileFactory() 
 		await metaStorage.set(file);
 
 		file.versions[0].name = 'super-plan.txt'	
 		await metaStorage.set(file);
 
-		const res = await metaStorage.read(file.id, file.type)
+		const res = await metaStorage.read(file)
 
 		expect(res).toEqual(file);
 	});
@@ -61,19 +61,19 @@ describe('MetaStorage', () => {
 		const file2 = fileFactory() 
 		await metaStorage.set(file);
 
-		const isFileStored = await metaStorage.has(file.id, file.type)
+		const isFileStored = await metaStorage.has(file)
 		expect(isFileStored).toEqual(true);
-		const isFile2Stored = await metaStorage.has(file2.id, file2.type)
+		const isFile2Stored = await metaStorage.has(file2)
 		expect(isFile2Stored).toEqual(false);
 	});
 
 	test('Should delete the file', async () => {
 		const file = fileFactory() 
 		await metaStorage.set(file);
-		expect(await metaStorage.has(file.id, file.type)).toBe(true)
+		expect(await metaStorage.has(file)).toBe(true)
 
-		await metaStorage.destroy(file.id, file.type)
-		expect(await metaStorage.has(file.id, file.type)).toBe(false)
+		await metaStorage.destroy(file)
+		expect(await metaStorage.has(file)).toBe(false)
 	});
 
 	test('Should have multiple version', async () => {
@@ -90,7 +90,7 @@ describe('MetaStorage', () => {
 		})
 
 		await metaStorage.set(file);
-		const res = await metaStorage.read(file.id, file.type);
+		const res = await metaStorage.read(file);
 
 		expect(res).toStrictEqual(file);
 	});
@@ -99,7 +99,7 @@ describe('MetaStorage', () => {
 		const file = fileFactory() 
 		await metaStorage.set(file);
 
-		const res = await metaStorage.read(file.id, file.type);
+		const res = await metaStorage.read(file);
 
 		expect(res.versions[0].date).toBe(file.versions[0].date);
 	});
