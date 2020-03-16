@@ -38,8 +38,8 @@ export async function createBluzelleMetaStorage(bluzelleConnection: any): Promis
     return create(itemMeta);
   };
 
-  async function close(){
-    await bluzelleConnection.close() //TODO
+  function close(){
+    return Promise.resolve()
   }
 
   return {
