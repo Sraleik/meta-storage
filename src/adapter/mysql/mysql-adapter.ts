@@ -4,26 +4,29 @@ import { IFileMeta } from '../../interface/IFileMeta'
 import { IItemMeta } from '../../interface/IItemMeta'
 import { FileMeta } from "../../entity/FileMeta";
 import { getRepository } from "typeorm";
+import { IAdapter } from '../IAdapter';
 
-export async function createMysqlMetaStorage(mysqlConnection: any) {
+export async function createMysqlMetaStorage(mysqlConnection: any): Promise<IAdapter> {
   async function set(itemMeta: IItemMeta){
       if(itemMeta.type === 'file') {
           const file = await prepareFile(itemMeta as IFileMeta) 
-          await file.save().catch((e) => {
-            throw new Error(e)
-          })
+          await file.save()
+          
+          return file.id
       }
   }
   
-  async function read({ id, type }: IItemMeta) {
+  async function read({ id, type }: IItemMeta): Promise<Object | undefined> {
     let res;
     if(type === 'file') {
-        const fileEntity = await getRepository(FileMeta)
-                                  .createQueryBuilder('file_meta')
-                                  .leftJoinAndSelect('file_meta.versions', "versions")
-                                  .where("file_meta.id = :id", {id})
-                                  .orderBy({'versions.date': 'ASC'})
-                                  .getOne(); 
+        const fileEntity = 
+          await getRepository(FileMeta)
+            .createQueryBuilder('file_meta')
+            .leftJoinAndSelect('file_meta.versions', "versions")
+            .where("file_meta.id = :id", {id})
+            .orderBy({'versions.date': 'ASC'})
+            .getOne(); 
+
         res = classToPlain(fileEntity) 
     }
 
@@ -34,15 +37,16 @@ export async function createMysqlMetaStorage(mysqlConnection: any) {
     if(type === 'file') {
         const fileEntity = await FileMeta.findOne({ where: { id }})
         await fileEntity?.remove()
+
+        return id
     }
   }
 
-  async function has({ id, type }: IItemMeta): Promise<Boolean>{
+  async function has({ id, type }: IItemMeta): Promise<boolean>{
     if(type === 'file') {
         const fileEntity = await FileMeta.findOne({ where: { id }})
         return Boolean(fileEntity) 
     }
-
     return false
   }
 
@@ -56,5 +60,5 @@ export async function createMysqlMetaStorage(mysqlConnection: any) {
     destroy,
     has,
     close
-  };
+  }
 }

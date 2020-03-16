@@ -1,8 +1,9 @@
-import { createConnection } from "typeorm";
-import { createMysqlMetaStorage  } from './mysql-adaptater';
+import { execSync } from 'child_process';
+import  { createMockBluzelle } from '@sraleik/mock-bluzelle';
+import { createBluzelleMetaStorage  } from './bluzelle-adapter';
 import { v4 as uuid } from 'uuid';
 
-let mysqlConnection: any, metaStorage: any;
+let bluzelleConnection: any, metaStorage: any;
 
 function fileFactory ({
 	cid = 'FakeCID',
@@ -26,14 +27,14 @@ function fileFactory ({
 	}
 }
 
-describe('MetaStorage', () => {
+describe.only('MetaStorage', () => {
     beforeAll(async function() {
-		mysqlConnection= await createConnection();
-		metaStorage = await createMysqlMetaStorage(mysqlConnection);
+		bluzelleConnection = await createMockBluzelle();
+		metaStorage = await createBluzelleMetaStorage(bluzelleConnection);
 	});
 
     afterAll(async function() {
-		metaStorage.close()
+		// metaStorage.close()
     });
 
     test('Should create file & versions', async () => {
