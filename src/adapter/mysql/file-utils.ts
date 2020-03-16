@@ -40,15 +40,3 @@ export async function prepareFile(fileMeta: IFileMeta): Promise<FileMeta>{
 
     return file
 }
-
-//Todo : add IFolderMeta to possible type
-async function set(itemMeta: IFileMeta){
-    const connection = await createConnection()
-
-    if(itemMeta.type === 'file') {
-        const file = await prepareFile(itemMeta) 
-        await file.save() 
-    }
-    
-    await connection.close()
-}

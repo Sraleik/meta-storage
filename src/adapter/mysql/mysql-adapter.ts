@@ -1,5 +1,5 @@
 import { prepareFile }from './file-utils'
-import { classToPlain} from 'class-transformer'
+import { classToPlain } from 'class-transformer'
 import { IFileMeta } from '../../interface/IFileMeta'
 import { IItemMeta } from '../../interface/IItemMeta'
 import { FileMeta } from "../../entity/FileMeta";
@@ -9,7 +9,7 @@ import { IAdapter } from '../IAdapter';
 export async function createMysqlMetaStorage(mysqlConnection: any): Promise<IAdapter> {
   async function set(itemMeta: IItemMeta){
       if(itemMeta.type === 'file') {
-          const file = await prepareFile(itemMeta as IFileMeta) 
+          const file = await prepareFile(itemMeta as IFileMeta)
           await file.save()
           
           return file.id
