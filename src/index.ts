@@ -1,3 +1,3 @@
-import { createBluzelleMetaStorage } from './adapter/bluzelle/bluzelle-adapter'
+import { createBluzelleMetaStorage } from './adapter/bluzelle/bluzelle-adapter';
 
-export { createBluzelleMetaStorage }
+export { createBluzelleMetaStorage };

@@ -1,52 +1,50 @@
-import { IAdapter } from "../IAdapter";
-import { IItemMeta } from "../../interface/IItemMeta";
+import { IAdapter } from '../IAdapter';
+import { IItemMeta } from '../../interface/IItemMeta';
 
 export async function createBluzelleMetaStorage(bluzelleConnection: any): Promise<IAdapter> {
-  async function create (itemMeta: IItemMeta) {
-    await bluzelleConnection
-            .create(itemMeta.id, JSON.stringify(itemMeta))
-    
-    return itemMeta.id 
-  };
+	async function create(itemMeta: IItemMeta) {
+		await bluzelleConnection.create(itemMeta.id, JSON.stringify(itemMeta));
 
-  async function update(itemMeta: IItemMeta) {
-    await bluzelleConnection
-            .update(itemMeta.id, JSON.stringify(itemMeta));
+		return itemMeta.id;
+	}
 
-    return itemMeta.id
-  };
+	async function update(itemMeta: IItemMeta) {
+		await bluzelleConnection.update(itemMeta.id, JSON.stringify(itemMeta));
 
-  async function read({ id }: IItemMeta) {
-    const value = await bluzelleConnection.read(id);
-    return JSON.parse(value);
-  };
+		return itemMeta.id;
+	}
 
-  async function destroy({ id }: IItemMeta) {
-    await bluzelleConnection.delete(id);
-    return id
-  }
-  
-  function has({ id }: IItemMeta): Promise<boolean> {
-    return bluzelleConnection.has(id);
-  }
+	async function read({ id }: IItemMeta) {
+		const value = await bluzelleConnection.read(id);
+		return JSON.parse(value);
+	}
 
-  async function set(itemMeta: IItemMeta) {
-    if (await bluzelleConnection.has(itemMeta.id)) {
-      return update(itemMeta);
-    }
+	async function destroy({ id }: IItemMeta) {
+		await bluzelleConnection.delete(id);
+		return id;
+	}
 
-    return create(itemMeta);
-  };
+	function has({ id }: IItemMeta): Promise<boolean> {
+		return bluzelleConnection.has(id);
+	}
 
-  function close(){
-    return Promise.resolve()
-  }
+	async function set(itemMeta: IItemMeta) {
+		if (await bluzelleConnection.has(itemMeta.id)) {
+			return update(itemMeta);
+		}
 
-  return {
-    set,
-    read,
-    destroy,
-    has,
-    close
-  };
+		return create(itemMeta);
+	}
+
+	function close() {
+		return Promise.resolve();
+	}
+
+	return {
+		set,
+		read,
+		destroy,
+		has,
+		close,
+	};
 }
