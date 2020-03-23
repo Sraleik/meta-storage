@@ -12,10 +12,9 @@ export async function prepareFileVersions(fileVersions?: [IFileVersion] | []): P
 
     const versions: FileVersion[] = [];
 
-    for(let i = 0; i < fileVersions.length; i++){
-        const fileVersion = fileVersions[i]
+    for(const fileVersion of fileVersions) {
 
-        let version = new FileVersion()
+        const version = new FileVersion()
         version.id = fileVersion.id
         version.cid = fileVersion.cid
         version.date = fileVersion.date
@@ -41,7 +40,7 @@ export async function prepareFile(fileMeta: IFileMeta): Promise<FileMeta>{
     return file
 }
 
-//Todo : add IFolderMeta to possible type
+// Todo : add IFolderMeta to possible type
 async function set(itemMeta: IFileMeta){
     const connection = await createConnection()
 

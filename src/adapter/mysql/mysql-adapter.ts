@@ -16,7 +16,7 @@ export async function createMysqlMetaStorage(mysqlConnection: any): Promise<IAda
       }
   }
   
-  async function read({ id, type }: IItemMeta): Promise<Object | undefined> {
+  async function read({ id, type }: IItemMeta): Promise<object | undefined> {
     let res;
     if(type === 'file') {
         const fileEntity = 
